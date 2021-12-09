@@ -19,16 +19,6 @@ class LocacaoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreLocacaoRequest  $request
@@ -46,17 +36,6 @@ class LocacaoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Locacao $locacao)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Locacao  $locacao
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Locacao $locacao)
     {
         //
     }
