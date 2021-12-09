@@ -29,10 +29,17 @@ class MarcaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $req)
+    public function store(Request $request)
     {
-        //return Marca::create($req->all());
-        $marca = $this->marca->create($req->all());
+        $request->validate($this->marca->rules(), $this->marca->feedback());
+        $image = $request->file('imagem');
+        $img_urn = $image->store('imagens', 'public'); // pasta onde salvar, segundo parâmetro diz onde tipo 's3, local, public' sendo opcional;
+        $marca = $this->marca->create(
+            [
+                'nome' => $request->nome,
+                'imagem' => $img_urn,
+            ]
+        );
 
         return response()->json($marca, 201);
     }
@@ -61,7 +68,7 @@ class MarcaController extends Controller
      * @param  Integer $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $req, $id)
+    public function update(Request $request, $id)
     {
         $marca = $this->marca->find($id);
 
@@ -69,7 +76,21 @@ class MarcaController extends Controller
             return response()->json(['erro' => 'NotFound'], 404);
         }
 
-        $marca->update($req->all());
+        if ($request->method() === 'PATCH') {
+
+            $rules = array();
+
+            foreach ($marca->rules() as $input => $rule) {
+                if (array_key_exists($input, $request->all())) {
+                    $rules[$input] = $rule;
+                }
+            }
+            $request->validate($rules, $marca->feedback());
+        } else {
+            $request->validate($marca->rules(), $marca->feedback());
+        }
+
+        $marca->update($request->all());
 
         return response()->json($marca, 200);
     }
