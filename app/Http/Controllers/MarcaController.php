@@ -34,7 +34,7 @@ class MarcaController extends Controller
     {
         $request->validate($this->marca->rules(), $this->marca->feedback());
         $image = $request->file('imagem');
-        $img_urn = $image->store('imagens', 'public'); // pasta onde salvar, segundo parâmetro diz onde tipo 's3, local, public' sendo opcional;
+        $img_urn = $image->store('imagens', 's3'); // pasta onde salvar, segundo parâmetro diz onde tipo 's3, local, public' sendo opcional;
         $marca = $this->marca->create(
             [
                 'nome' => $request->nome,
@@ -92,11 +92,11 @@ class MarcaController extends Controller
         }
 
         if ($request->file('imagem')) {
-            Storage::disk('public')->delete($marca->imagem);
+            Storage::disk('s3')->delete($marca->imagem);
         }
 
         $image = $request->file('imagem');
-        $img_urn = $image->store('imagens', 'public'); // pasta onde salvar, segundo parâmetro diz onde tipo 's3, local, public' sendo opcional;
+        $img_urn = $image->store('imagens', 's3'); // pasta onde salvar, segundo parâmetro diz onde tipo 's3, local, public' sendo opcional;
 
         $marca->update([
             'nome' => $request->nome,
@@ -120,7 +120,7 @@ class MarcaController extends Controller
             return response()->json(['erro' => 'NotFound'], 404);
         }
 
-        Storage::disk('public')->delete($marca->imagem);
+        Storage::disk('s3')->delete($marca->imagem);
 
         $marca->delete();
 
