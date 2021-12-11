@@ -100,7 +100,7 @@ class MarcaController extends Controller
 
         $marca->update([
             'nome' => $request->nome,
-            'imagem' => $img_urn,
+            'imagem' => env('AWS_URL') . $img_urn,
         ]);
 
         return response()->json($marca, 200);
